@@ -9,7 +9,8 @@ const ALL_CATEGORIES = 'All Sports';
 const sportCategories: SportCategory[] = [
   'Football',
   'Baseball',
-  'Basketball',
+  "Men's Basketball",
+  "Women's Basketball",
   'Softball',
   'Soccer',
   'Volleyball',

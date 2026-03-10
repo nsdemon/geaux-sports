@@ -1,7 +1,8 @@
 export type SportCategory =
   | 'Football'
   | 'Baseball'
-  | 'Basketball'
+  | "Men's Basketball"
+  | "Women's Basketball"
   | 'Softball'
   | 'Soccer'
   | 'Volleyball'
