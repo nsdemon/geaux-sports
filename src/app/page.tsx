@@ -41,7 +41,7 @@ export default function Home() {
 
   const filteredUpcoming = useMemo(() => {
     let list = upcomingFilter === ALL_CATEGORIES
-      ? upcomingGames
+      ? [...upcomingGames]
       : upcomingGames.filter((g) => g.sport === upcomingFilter);
     if (upcomingDateFrom) {
       list = list.filter((g) => g.date >= upcomingDateFrom);
@@ -49,12 +49,12 @@ export default function Home() {
     if (upcomingDateTo) {
       list = list.filter((g) => g.date <= upcomingDateTo);
     }
-    return list;
+    return list.sort((a, b) => a.date.localeCompare(b.date));
   }, [upcomingFilter, upcomingDateFrom, upcomingDateTo]);
 
   const filteredScores = useMemo(() => {
     let list = scoresFilter === ALL_CATEGORIES
-      ? scores2026
+      ? [...scores2026]
       : scores2026.filter((g) => g.sport === scoresFilter);
     if (scoresDateFrom) {
       list = list.filter((g) => g.date >= scoresDateFrom);
@@ -62,7 +62,7 @@ export default function Home() {
     if (scoresDateTo) {
       list = list.filter((g) => g.date <= scoresDateTo);
     }
-    return list;
+    return list.sort((a, b) => b.date.localeCompare(a.date));
   }, [scoresFilter, scoresDateFrom, scoresDateTo]);
 
   const scoreDisplay = (lsu: number, opp: number) =>
