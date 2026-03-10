@@ -34,16 +34,36 @@ function formatDate(dateStr: string) {
 export default function Home() {
   const [upcomingFilter, setUpcomingFilter] = useState<string>(ALL_CATEGORIES);
   const [scoresFilter, setScoresFilter] = useState<string>(ALL_CATEGORIES);
+  const [upcomingDateFrom, setUpcomingDateFrom] = useState<string>('');
+  const [upcomingDateTo, setUpcomingDateTo] = useState<string>('');
+  const [scoresDateFrom, setScoresDateFrom] = useState<string>('');
+  const [scoresDateTo, setScoresDateTo] = useState<string>('');
 
   const filteredUpcoming = useMemo(() => {
-    if (upcomingFilter === ALL_CATEGORIES) return upcomingGames;
-    return upcomingGames.filter((g) => g.sport === upcomingFilter);
-  }, [upcomingFilter]);
+    let list = upcomingFilter === ALL_CATEGORIES
+      ? upcomingGames
+      : upcomingGames.filter((g) => g.sport === upcomingFilter);
+    if (upcomingDateFrom) {
+      list = list.filter((g) => g.date >= upcomingDateFrom);
+    }
+    if (upcomingDateTo) {
+      list = list.filter((g) => g.date <= upcomingDateTo);
+    }
+    return list;
+  }, [upcomingFilter, upcomingDateFrom, upcomingDateTo]);
 
   const filteredScores = useMemo(() => {
-    if (scoresFilter === ALL_CATEGORIES) return scores2026;
-    return scores2026.filter((g) => g.sport === scoresFilter);
-  }, [scoresFilter]);
+    let list = scoresFilter === ALL_CATEGORIES
+      ? scores2026
+      : scores2026.filter((g) => g.sport === scoresFilter);
+    if (scoresDateFrom) {
+      list = list.filter((g) => g.date >= scoresDateFrom);
+    }
+    if (scoresDateTo) {
+      list = list.filter((g) => g.date <= scoresDateTo);
+    }
+    return list;
+  }, [scoresFilter, scoresDateFrom, scoresDateTo]);
 
   const scoreDisplay = (lsu: number, opp: number) =>
     Number.isInteger(lsu) && Number.isInteger(opp)
@@ -64,7 +84,7 @@ export default function Home() {
           <h2 className="section-title">Upcoming Games</h2>
           <div className="filter-row">
             <label htmlFor="upcoming-category" className="filter-label">
-              Filter by sport
+              Sport
             </label>
             <select
               id="upcoming-category"
@@ -79,6 +99,26 @@ export default function Home() {
                 </option>
               ))}
             </select>
+            <label htmlFor="upcoming-date-from" className="filter-label">
+              From date
+            </label>
+            <input
+              id="upcoming-date-from"
+              type="date"
+              value={upcomingDateFrom}
+              onChange={(e) => setUpcomingDateFrom(e.target.value)}
+              className="input-date"
+            />
+            <label htmlFor="upcoming-date-to" className="filter-label">
+              To date
+            </label>
+            <input
+              id="upcoming-date-to"
+              type="date"
+              value={upcomingDateTo}
+              onChange={(e) => setUpcomingDateTo(e.target.value)}
+              className="input-date"
+            />
           </div>
           <ul className="game-list">
             {filteredUpcoming.map((game) => (
@@ -98,7 +138,7 @@ export default function Home() {
             ))}
           </ul>
           {filteredUpcoming.length === 0 && (
-            <p className="empty">No upcoming games for this category.</p>
+            <p className="empty">No upcoming games for this sport or date range.</p>
           )}
         </section>
 
@@ -106,7 +146,7 @@ export default function Home() {
           <h2 className="section-title">2026 Scores</h2>
           <div className="filter-row">
             <label htmlFor="scores-category" className="filter-label">
-              Filter by sport
+              Sport
             </label>
             <select
               id="scores-category"
@@ -121,6 +161,26 @@ export default function Home() {
                 </option>
               ))}
             </select>
+            <label htmlFor="scores-date-from" className="filter-label">
+              From date
+            </label>
+            <input
+              id="scores-date-from"
+              type="date"
+              value={scoresDateFrom}
+              onChange={(e) => setScoresDateFrom(e.target.value)}
+              className="input-date"
+            />
+            <label htmlFor="scores-date-to" className="filter-label">
+              To date
+            </label>
+            <input
+              id="scores-date-to"
+              type="date"
+              value={scoresDateTo}
+              onChange={(e) => setScoresDateTo(e.target.value)}
+              className="input-date"
+            />
           </div>
           <ul className="score-list">
             {filteredScores.map((game) => (
@@ -144,7 +204,7 @@ export default function Home() {
             ))}
           </ul>
           {filteredScores.length === 0 && (
-            <p className="empty">No 2026 scores for this category.</p>
+            <p className="empty">No 2026 scores for this sport or date range.</p>
           )}
         </section>
       </div>
